@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Instagram Feed - Arash</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"/>
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"/>
+  </head>
+
+  <body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-white border-bottom sticky-top">
+      <div class="container d-flex justify-content-between align-items-center">
+        <!-- logo samte chap-->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+          <i class="fa-brands fa-instagram fa-lg"></i>
+          <span>Instagram</span>
+        </a>
+
+        <!-- logo samte rast va dropdown-->
+        <div class="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#newPostModal">
+            Create a new post
+          </button>
+
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="fa-solid fa-gear"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Accessibility</a></li>
+              <li><a class="dropdown-item" href="#">Privacy and Data</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item text-danger" href="#">Log out</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 🔹 Modal baraye creat new post -->
+    <div
+      class="modal fade"
+      id="newPostModal"
+      tabindex="-1"
+      aria-labelledby="newPostModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fs-5" id="newPostModalLabel">
+              Create a new post
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <form id="postForm">
+              <div class="mb-3">
+                <label for="captionInput" class="form-label">Caption:</label>
+                <textarea
+                  class="form-control"
+                  id="captionInput"
+                  rows="3"
+                  placeholder="Add the caption of your post here">
+                </textarea>
+              </div>
+              <div class="d-flex justify-content-start gap-2">
+                <button type="button" class="btn btn-outline-secondary">
+                  <i class="fa-solid fa-camera"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary">
+                  <i class="fa-solid fa-location-dot"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-success">Publish</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 ta toggle ha-->
+    <div class="text-center my-3">
+      <i class="fa-solid fa-table-cells fa-lg mx-2 text-primary"
+        id="gridView"
+        title="Grid view"
+        role="button"></i>
+
+      <i class="fa-solid fa-square fa-lg mx-2 text-secondary"
+        id="listView"
+        title="List view"
+        role="button"></i>
+    </div>
+
+    <!-- araye baste bandi-->
+    <div class="container my-4" id="feedContainer">
+      <div class="row g-3" id="postsRow">
+        <!--posts-->
+      </div>
+    </div>
+
+    <!--Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+      // 6 posts
+      const postsRow = document.getElementById("postsRow");
+      const photo = "https://picsum.photos/id/237/600/600";
+
+      for (let i = 1; i <= 6; i++) {
+        const col = document.createElement("div");
+        col.className = "col-12 col-md-4";
+
+        col.innerHTML = `
+          <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between">
+              <strong>My Crazy Dog Spark!</strong>
+              <span class="text-muted small">08/26</span>
+            </div>
+            <img src="${photo}" class="card-img-top" alt="dog photo ${i}">
+            <div class="card-body">
+              <p class="fw-bold mb-1">204 Likes</p>
+              <p class="text-muted mb-0">This is post number ${i}.</p>
+            </div>
+          </div>`;
+        postsRow.appendChild(col);
+      }
+
+      // Toggle logic
+      const gridView = document.getElementById("gridView");
+      const listView = document.getElementById("listView");
+
+      function updateLayout(isGrid) {
+        document.querySelectorAll("#postsRow > div").forEach((col) => {
+          if (isGrid) {
+            col.className = "col-12 col-md-4"; // grid view (3 per row)
+          } else {
+            col.className = "col-12 d-flex justify-content-center"; // list view (centered)
+            col.querySelector(".card").style.maxWidth = "500px";
+          }
+        });
+      }
+
+      gridView.addEventListener("click", () => {
+        gridView.classList.replace("text-secondary", "text-primary");
+        listView.classList.replace("text-primary", "text-secondary");
+        updateLayout(true);
+      });
+
+      listView.addEventListener("click", () => {
+        listView.classList.replace("text-secondary", "text-primary");
+        gridView.classList.replace("text-primary", "text-secondary");
+        updateLayout(false);
+      });
+
+      // Default layout (grid)
+      updateLayout(true);
+    </script>
+  </body>
+</html>
